@@ -8,15 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "PATIENT")
-public class Patient implements EMSEntity {
+@Table(name = "DOCTOR")
+public class Doctor implements EMSEntity {
 
     @Id
     @Column(name = "ID", nullable = false)
@@ -28,13 +26,6 @@ public class Patient implements EMSEntity {
 
     @Column(name = "UUID")
     private String uuid;
-
-    @Column(name = "DOCTOR_UUID")
-    private String consultingDoctorUuid;
-
-    @ManyToOne(targetEntity = Doctor.class)
-    @JoinColumn(name = "DOCTOR_UUID", referencedColumnName = "UUID", insertable = false, updatable = false)
-    private Doctor consultingDoctor ;
 
     @PrePersist
     public void prePersist() {

@@ -1,5 +1,7 @@
 package com.rah.ems.controller;
 
+import com.rah.ems.builder.DoctorBuilder;
+import com.rah.ems.model.Doctor;
 import com.rah.ems.model.EMSEntity;
 import com.rah.ems.boot.Application;
 import com.rah.ems.builder.PatientBuilder;
@@ -29,7 +31,7 @@ public class EMSControllerTest {
     }
 
     @Test
-    public void testCreateEntity() {
+    public void testCreatePatient() {
         EMSEntity emsEntity = PatientBuilder.createPatient().inMemory();
         EntityRequest entityRequest = new EntityRequest("Patient", emsEntity);
         ResponseEntity responseEntity = controller.createEntity(entityRequest);
@@ -38,7 +40,7 @@ public class EMSControllerTest {
     }
 
     @Test
-    public void testUpdateAndGetEntity() {
+    public void testUpdateAndGetPatient() {
         String type = "Patient";
         EMSEntity emsEntity = PatientBuilder.createPatient().inMemory();
         EntityRequest entityRequest = new EntityRequest(type, emsEntity);
@@ -56,5 +58,31 @@ public class EMSControllerTest {
         assertTrue(responseEntity.getStatusCode() == HttpStatus.OK);
         patient = (Patient)((EntityResponse)responseEntity.getBody()).getEntity();
         assertTrue(patient.getName().equals("Test_Name_2"));
+    }
+
+    @Test
+    public void testCreateAndGetDoctorAndPatient() {
+        String typeDoctor = "Doctor";
+        EMSEntity emsDoctorEntity = DoctorBuilder.createDoctor().inMemory();
+        EntityRequest entityDoctorRequest = new EntityRequest(typeDoctor, emsDoctorEntity);
+        ResponseEntity responseDoctorEntity = controller.createEntity(entityDoctorRequest);
+        assertTrue(responseDoctorEntity.getStatusCode() == HttpStatus.OK);
+        Doctor doctor = (Doctor)((EntityResponse)responseDoctorEntity.getBody()).getEntity();
+        assertTrue(doctor.getName().equals("Test_Name_Doc"));
+
+        String typePatient = "Patient";
+        EMSEntity emsPatientEntity = PatientBuilder.createPatient().withConsultingDoctorUuid(doctor.getUuid()).inMemory();
+        EntityRequest entityPatientRequest = new EntityRequest(typePatient, emsPatientEntity);
+        ResponseEntity responsePatientEntity = controller.createEntity(entityPatientRequest);
+        assertTrue(responsePatientEntity.getStatusCode() == HttpStatus.OK);
+        Patient patient = (Patient)((EntityResponse)responsePatientEntity.getBody()).getEntity();
+        assertTrue(patient.getName().equals("Test_Name"));
+
+        responsePatientEntity = controller.getEntity(patient.getUuid(), typePatient);
+        assertTrue(responsePatientEntity.getStatusCode() == HttpStatus.OK);
+        patient = (Patient)((EntityResponse)responsePatientEntity.getBody()).getEntity();
+        assertTrue(patient.getName().equals("Test_Name"));
+        assertTrue(patient.getConsultingDoctor().getUuid().equals(doctor.getUuid()));
+        assertTrue(patient.getConsultingDoctor().getName().equals(doctor.getName()));
     }
 }

@@ -13,7 +13,8 @@ public class PatientBuilder implements EntityBuilder {
     @Override
     public EMSEntity saveEntity(EMSEntity emsEntity) {
         Patient existingPatient = (Patient)emsEntity;
-        return new PatientBuilder().withId(existingPatient.getId()).withName(existingPatient.getName()).withUuid(existingPatient.getUuid()).inDatabase();
+        return new PatientBuilder().withId(existingPatient.getId()).withName(existingPatient.getName())
+            .withUuid(existingPatient.getUuid()).withConsultingDoctorUuid(existingPatient.getConsultingDoctorUuid()).inDatabase();
     }
 
     public static PatientBuilder createPatient() {
@@ -35,6 +36,11 @@ public class PatientBuilder implements EntityBuilder {
         return this;
     }
 
+    public PatientBuilder withConsultingDoctorUuid(String uuid) {
+        patient.setConsultingDoctorUuid(uuid);
+        return this;
+    }
+
     public Patient inMemory() {
         return patient;
     }
@@ -44,7 +50,7 @@ public class PatientBuilder implements EntityBuilder {
         return patientRepository.saveAndFlush(patient);
     }
 
-    public static void setPatientRepository(PatientRepository patientRepository) {
+    public static void setRepository(PatientRepository patientRepository) {
         PatientBuilder.patientRepository = patientRepository;
     }
 

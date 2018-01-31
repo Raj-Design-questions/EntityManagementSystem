@@ -1,4 +1,6 @@
 package com.rah.ems.model;
 
-public interface EMSEntity {
+import java.io.Serializable;
+
+public interface EMSEntity extends Serializable{
 }
