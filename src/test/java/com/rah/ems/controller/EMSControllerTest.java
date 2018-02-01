@@ -90,6 +90,6 @@ public class EMSControllerTest {
         assertTrue(responseDoctorEntity.getStatusCode() == HttpStatus.OK);
         doctor = (Doctor)((EntityResponse)responseDoctorEntity.getBody()).getEntity();
         assertTrue(doctor.getName().equals("Test_Name_Doc"));
-        assertTrue(doctor.getPatients().get(0).getName().equals("Test_Name"));
+        assertTrue(doctor.getPatients().get(0).getName().equals(patient.getName()));
     }
 }
