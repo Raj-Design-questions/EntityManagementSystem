@@ -41,6 +41,15 @@ public class Patient implements EMSEntity {
         if (uuid == null) {
             uuid = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
         }
+    }
 
+    @Override
+    public String toString() {
+        return "Patient{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", uuid='" + uuid + '\'' +
+            ", consultingDoctorUuid='" + consultingDoctorUuid + '\'' +
+            '}';
     }
 }

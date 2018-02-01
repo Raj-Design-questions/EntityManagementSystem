@@ -1,10 +1,10 @@
 package com.rah.ems.controller;
 
+import com.rah.ems.boot.Application;
 import com.rah.ems.builder.DoctorBuilder;
+import com.rah.ems.builder.PatientBuilder;
 import com.rah.ems.model.Doctor;
 import com.rah.ems.model.EMSEntity;
-import com.rah.ems.boot.Application;
-import com.rah.ems.builder.PatientBuilder;
 import com.rah.ems.model.EntityRequest;
 import com.rah.ems.model.EntityResponse;
 import com.rah.ems.model.Patient;
@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -84,5 +85,11 @@ public class EMSControllerTest {
         assertTrue(patient.getName().equals("Test_Name"));
         assertTrue(patient.getConsultingDoctor().getUuid().equals(doctor.getUuid()));
         assertTrue(patient.getConsultingDoctor().getName().equals(doctor.getName()));
+
+        responseDoctorEntity = controller.getEntity(doctor.getUuid(), typeDoctor);
+        assertTrue(responseDoctorEntity.getStatusCode() == HttpStatus.OK);
+        doctor = (Doctor)((EntityResponse)responseDoctorEntity.getBody()).getEntity();
+        assertTrue(doctor.getName().equals("Test_Name_Doc"));
+        assertTrue(doctor.getPatients().get(0).getName().equals("Test_Name"));
     }
 }

@@ -1,19 +1,14 @@
 package com.rah.ems.service.impl;
 
 import com.rah.ems.model.EMSEntity;
+import com.rah.ems.model.EntityRequest;
 import com.rah.ems.model.EntityResponse;
-import com.rah.ems.repository.PatientRepository;
 import com.rah.ems.service.IEMSService;
 import com.rah.ems.support.EntityHelper;
-import com.rah.ems.model.EntityRequest;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
 
 @Service
 public class EMSService implements IEMSService {
-
-    @Inject PatientRepository patientRepository;
 
     @Override
     public EntityResponse createEntity(EntityRequest entityRequest) {
